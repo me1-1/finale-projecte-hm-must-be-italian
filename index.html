@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pack & Survive</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero" aria-labelledby="game-title">
+        <div class="hero-art" aria-hidden="true">
+          <div class="sun"></div>
+          <div class="mountain mountain-back"></div>
+          <div class="mountain mountain-front"></div>
+          <div class="road"></div>
+          <div class="pack">
+            <div class="pack-pocket"></div>
+            <div class="pack-flap"></div>
+          </div>
+        </div>
+        <div class="hero-copy">
+          <p class="eyebrow">Emergency Kit Challenge</p>
+          <h1 id="game-title">Pack & Survive</h1>
+          <p>
+            Choose a disaster, fill your backpack, then see how your kit holds up when trouble arrives.
+          </p>
+          <div class="game-note" role="note">
+            This is an educational game, not official emergency advice. For a real kit, use guidance from your
+            family, school, local emergency office, or a trusted safety organization.
+          </div>
+        </div>
+      </section>
+
+      <section class="mode-switch" aria-label="Game modes">
+        <button class="mode-button active" id="regularModeButton" type="button">Regular Mode</button>
+        <button class="mode-button" id="simulatorModeButton" type="button">Simulator Mode</button>
+        <button class="mode-button" id="realisticModeButton" type="button">Realistic Mode</button>
+      </section>
+
+      <section class="game-board" id="regularMode" aria-label="Regular disaster prevention mode">
+        <aside class="side-panel">
+          <div class="panel-section">
+            <h2>Scenario</h2>
+            <div class="scenario-grid" id="scenarioGrid"></div>
+          </div>
+
+          <div class="panel-section setup-card">
+            <h2>Planning Limits</h2>
+            <div class="setup-grid">
+              <span>Family</span>
+              <strong id="familySizeLabel">1 person</strong>
+              <span>Backpack</span>
+              <strong id="backpackLimitLabel">12 slots</strong>
+            </div>
+            <button class="mini-action" id="randomizeSetupButton" type="button">Randomize Limits</button>
+          </div>
+
+          <div class="panel-section">
+            <h2>Shelter Spot</h2>
+            <div class="shelter-grid" id="shelterGrid"></div>
+          </div>
+
+          <div class="panel-section survival-meter">
+            <h2>Backpack</h2>
+            <div class="meter-row">
+              <span id="slotCount">0 / 12 slots</span>
+              <span id="scenarioLabel">Earthquake</span>
+            </div>
+            <div class="meter">
+              <div class="meter-fill" id="slotMeter"></div>
+            </div>
+          </div>
+
+          <div class="panel-section pack-list">
+            <h2>Packed Items</h2>
+            <div class="packed-items" id="packedItems"></div>
+          </div>
+
+          <button class="primary-action" id="simulateButton" type="button">Simulate Disaster</button>
+          <button class="secondary-action" id="resetButton" type="button">Empty Backpack</button>
+        </aside>
+
+        <section class="items-panel">
+          <div class="toolbar">
+            <div>
+              <h2>Supply Table</h2>
+              <p id="itemHint">Tap items to pack or remove them.</p>
+            </div>
+            <label class="search-box">
+              <span>Search</span>
+              <input id="searchInput" type="search" placeholder="water, radio, blanket..." />
+            </label>
+          </div>
+          <div class="category-tabs" id="categoryTabs" aria-label="Item categories"></div>
+          <div class="item-grid" id="itemGrid"></div>
+        </section>
+      </section>
+
+      <section class="simulator-board hidden" id="simulatorMode" aria-label="Simulator room mode">
+        <aside class="side-panel">
+          <div class="panel-section">
+            <h2>Random Event</h2>
+            <div class="unknown-event" id="simEventLabel">Unknown until simulation</div>
+          </div>
+
+          <div class="panel-section setup-card">
+            <h2>Room Limits</h2>
+            <div class="setup-grid">
+              <span>Family</span>
+              <strong id="simFamilySizeLabel">1 person</strong>
+              <span>Carry Space</span>
+              <strong id="simBagLimitLabel">8 items</strong>
+            </div>
+            <button class="mini-action" id="randomizeRoomSetupButton" type="button">Randomize Limits</button>
+          </div>
+
+          <div class="panel-section survival-meter">
+            <h2>Survival Bag</h2>
+            <div class="meter-row">
+              <span id="simSlotCount">0 / 8 items</span>
+              <span>Room Scan</span>
+            </div>
+            <div class="meter">
+              <div class="meter-fill" id="simSlotMeter"></div>
+            </div>
+          </div>
+
+          <div class="panel-section">
+            <h2>Shelter Spot</h2>
+            <div class="shelter-grid" id="simShelterGrid"></div>
+          </div>
+
+          <div class="panel-section pack-list">
+            <h2>Picked Up</h2>
+            <div class="picked-items" id="simPickedItems"></div>
+          </div>
+
+          <button class="primary-action" id="simulateRoomButton" type="button">Run Random Event</button>
+          <button class="secondary-action" id="resetRoomButton" type="button">Reset Room</button>
+        </aside>
+
+        <section class="room-panel">
+          <div class="toolbar">
+            <div>
+              <h2>Room Simulator</h2>
+              <p>Scan the room, pick up useful items, and choose where to shelter before the random event starts.</p>
+            </div>
+          </div>
+          <div class="room-scene" id="roomScene" aria-label="Interactive room"></div>
+        </section>
+      </section>
+
+      <section class="realistic-board hidden" id="realisticMode" aria-label="Realistic emergency house mode">
+        <aside class="side-panel">
+          <div class="panel-section">
+            <h2>Emergency</h2>
+            <div class="scenario-grid" id="realisticScenarioGrid"></div>
+          </div>
+
+          <div class="panel-section setup-card">
+            <h2>House Run</h2>
+            <div class="setup-grid">
+              <span>Status</span>
+              <strong id="realisticObjectiveLabel">Preparing</strong>
+              <span>Carry Space</span>
+              <strong id="realisticCarryLabel">6 items</strong>
+              <span>Location</span>
+              <strong id="realisticRoomLabel">Bedroom</strong>
+              <span>Floor</span>
+              <strong id="realisticFloorLabel">Ground floor</strong>
+              <span>Time Left</span>
+              <strong id="realisticTimerLabel" role="timer" aria-atomic="true">01:00</strong>
+            </div>
+            <div class="realistic-timer-track" id="realisticTimerTrack" aria-hidden="true">
+              <div class="realistic-timer-fill" id="realisticTimerMeter"></div>
+            </div>
+          </div>
+
+          <div class="panel-section responder-panel" id="responderPanel" aria-live="polite">
+            <h2>Radio & Responders</h2>
+            <p id="responderMessage">Explore first. Help is available outside.</p>
+          </div>
+
+          <div class="panel-section pack-list">
+            <h2>Carrying</h2>
+            <div class="picked-items" id="realisticPickedItems"></div>
+          </div>
+
+          <button class="primary-action" id="simulateRealisticButton" type="button">Simulate Disaster Here</button>
+          <button class="secondary-action" id="realisticActionButton" type="button">Nothing Nearby</button>
+          <button class="secondary-action" id="newHouseButton" type="button">Generate New House</button>
+        </aside>
+
+        <section class="house-panel">
+          <div class="toolbar">
+            <div>
+              <h2>Emergency House</h2>
+              <p id="realisticHouseSummary">Explore the house, collect supplies, and choose where you want to be when the event begins.</p>
+            </div>
+          </div>
+          <div class="game-viewport">
+            <canvas class="house-world" id="houseGrid" width="960" height="640" tabindex="0" aria-label="Playable top-down house map"></canvas>
+            <div class="game-prompt" id="realisticPrompt" aria-live="polite">Walk around to explore.</div>
+          </div>
+          <div class="move-controls" aria-label="Movement controls">
+            <button class="move-button" id="moveUpButton" type="button">↑</button>
+            <button class="move-button" id="moveLeftButton" type="button">←</button>
+            <button class="move-button" id="moveDownButton" type="button">↓</button>
+            <button class="move-button" id="moveRightButton" type="button">→</button>
+          </div>
+        </section>
+      </section>
+
+      <dialog class="results-modal" id="resultsModal">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">Simulation Complete</p>
+            <h2 id="resultTitle">You survived</h2>
+          </div>
+          <button class="icon-button" id="closeResults" type="button" aria-label="Close results">×</button>
+        </div>
+        <div class="score-card">
+          <div>
+            <span class="score-number" id="scoreNumber">0</span>
+            <span class="score-label">points</span>
+          </div>
+          <div class="grade" id="gradeBadge">Ready</div>
+        </div>
+        <div class="learning-summary">
+          <h3>Disaster Event</h3>
+          <p id="resultEvent">The scenario begins.</p>
+        </div>
+        <div class="learning-summary">
+          <h3>Conditions</h3>
+          <div class="condition-list" id="conditionList"></div>
+        </div>
+        <div class="learning-summary">
+          <h3>What You Learn</h3>
+          <p id="resultLesson">Every emergency kit should cover water, light, first aid, information, and warmth.</p>
+          <ul id="resultLessonList"></ul>
+        </div>
+        <div class="feedback-list" id="feedbackList"></div>
+        <div class="modal-actions">
+          <button class="secondary-action" id="tryAgainButton" type="button">Try Again</button>
+          <button class="primary-action" id="nextScenarioButton" type="button">Next Scenario</button>
+        </div>
+      </dialog>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
